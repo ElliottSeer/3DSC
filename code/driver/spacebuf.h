@@ -2,49 +2,33 @@
 #define _SPACEBUF_H__
 
 #include <iostream>
-using namespace std;
+#include "obj3d.h"
 
-typedef enum
-{
-    MVLSB, // bit
-} sp_format_t;
+using namespace std;
 
 class SpaceBuf
 {
 private:
-    unsigned int m_width;
-    unsigned int m_height;
-    unsigned int m_depth;
-    sp_format_t m_format;
-    void *m_p_spacebuf;
+    unsigned int m_width = 128;
+    unsigned int m_height = 56;
+    unsigned int m_depth = 16;
+    void *m_p_spacebuf = nullptr; // 以Byte来组织像素
+
+    void _drawLine_Pixel(int x0, int y0, int z0, int x1, int y1, int z1, uint8_t color);
+    void _drawCircle_Pixel(int xc, int yc, int zc, uint16_t radius, uint8_t color, bool full);
+    void _drawBall_Pixel(int xc, int yc, int zc, uint16_t radius, uint8_t color, bool fill);
 
 public:
-    SpaceBuf(unsigned int width, unsigned int height, unsigned int depth, sp_format_t format);
+    SpaceBuf(unsigned int width, unsigned int height, unsigned int depth);
     void clearBuffer();
+    void dumpBuffer();
+    void *getPFrameByDepth(unsigned int depth);
+    void drawObj(int x, int y, int z, Obj obj);
+    void drawPoint(Point p0, uint8_t color);
+    void drawPixel(int x, int y, int z, uint8_t color);
+    void drawLine(Point p0, Point p1, uint8_t color);
+    void drawBall(Point center, uint16_t radius, uint8_t color, bool fill);
     ~SpaceBuf();
 };
-
-SpaceBuf::SpaceBuf(unsigned int width, unsigned int height, unsigned int depth, sp_format_t format)
-{
-    m_width = width;
-    m_height = height;
-    m_depth = depth;
-    m_format = format;
-    switch (m_format)
-    {
-    case MVLSB:
-        m_p_spacebuf = new char[m_width * m_width * m_depth / 8];
-        break;
-
-    default:
-        break;
-    }
-}
-
-SpaceBuf::~SpaceBuf()
-{
-    delete (m_p_spacebuf);
-}
-
 
 #endif

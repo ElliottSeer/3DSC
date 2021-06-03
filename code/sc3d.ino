@@ -1,9 +1,7 @@
 #include"driver/sc3d.h"
 
 void setup() {
-
    Serial.begin(9600);
-
 }
 
 void loop() {
@@ -22,7 +20,4 @@ void loop() {
      if(count==10)
         led.disattach();
    }
-   
-   
-
 }
